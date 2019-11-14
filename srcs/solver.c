@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   filler.c                                           :+:      :+:    :+:   */
+/*   solver.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atyrode <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,14 +12,10 @@
 
 #include "filler.h"
 
-void		ft_exit(char *str)
+void		solver(t_game_state	*game)
 {
-	ft_printf("%s", str);
-	exit(0);
+	(void)game;
 }
 
-void		filler(t_game_state	*game)
-{
-	parser(game);
-	solver(game);
-}
+
+

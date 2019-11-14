@@ -15,15 +15,23 @@
 
 # include "libft.h"
 # include "structures.h"
+# ifdef __SIZEOF_UINT128__
+#endif
 
 /*
  ** Those includes might need to get removed before giving the project
- */
+*/
 
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 
-int			parser(t_game_state	*game, char *buffer);
+typedef __uint128_t 	uint128;
+
+int						parser(t_game_state	*game);
+void					filler(t_game_state *game);
+void					solver(t_game_state *game);
+void					print_bits(uint128 x, int size, int width);
+void					ft_exit(char 		*str);
 
 #endif

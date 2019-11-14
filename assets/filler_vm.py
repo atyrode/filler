@@ -1,4 +1,20 @@
-#!/usr/bin/env ruby
+import argparse
+
+# Creating an argument parser
+arg_parser = argparse.ArgumentParser()
+arg_parser.add_argument("filename", help="specify the file to norm check", type=str)
+arg_parser.add_argument("-f", "--fix", help="toggles the norm fixer", action="store_true")
+arg_parser.add_argument("-v", "--verbose", help="more information output on the norm errors", action="store_true")
+
+# Parsing given arguments
+args = arg_parser.parse_args()
+if not os.path.exists(args.filename):
+    logger.error("File doesn't exist or is inaccessible.")
+    exit()
+file["fix"] = False # args.fix
+file["verbose"] = args.verbose
+
+"""#!/usr/bin/env ruby
 # ***************************************************************************** #
 #                                                                               #
 #                                                          :::      ::::::::    #
@@ -70,6 +86,7 @@ class Plateau
 			@piece_content += "."
 		end
 		@piece_content[(y = rand(@piece_row)) * @piece_col + (x = rand(@piece_col))] = '*'
+
 		p = 0
 		i = 4
 		if (y + 1 < @piece_row && rand(i) == 1)
@@ -578,3 +595,4 @@ if __FILE__ == $0
 	 	exit -42
 	 end
 end
+"""

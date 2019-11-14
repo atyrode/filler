@@ -12,20 +12,25 @@
 
 #include "filler.h"
 
-int main(void)
+/*
+ ** The main function represents the game loop. It calls the different functions
+ ** of the game all the way to the solving algorithm.
+*/
+
+int					main(void)
 {
-	char 			buffer[15000];
 	t_game_state	game;
+	char			*line;
 
-	while((read(0, buffer, 15000)));
-	if (!parser(&game, buffer))
-		return (-1);
+	ft_bzero(&game, sizeof(t_game_state));
+	get_next_line(0, &line);
+	if (ft_strlen(line) < 11 || (line[10] != '1' && line[10] != '2'))
+		return (0);
+	game.player.sign = (line[10] == '1' ? 'O' : 'X');
+	ft_printf("Player sign = [%c]\n", game.player.sign);
+	free(line);
+	if (1)
+		filler(&game);
 
-	dprintf(2, "(main) Player number = %d\n", game.player_number);
-	dprintf(2, "(main) Map x = [%d], y = [%d]\n", game.map->coords->x, game.map->coords->y);
-	dprintf(2, "(main) Map representation = [%s]\n", game.map->representation);
-	dprintf(2, "(main) Piece x = [%d], y = [%d]\n", game.piece->coords->x, game.piece->coords->y);
-	dprintf(2, "(main) Piece representation = [%s]\n", game.piece->representation);
-	write(1, "10 10\n", 6);
 	return (0);
 }

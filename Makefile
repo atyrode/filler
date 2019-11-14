@@ -36,7 +36,9 @@ INCLUDES	= -I ./$(INCL_PATH) -I $(LIBFT_PATH)includes
 
 SRCS_FILES  =  main.c \
 				filler.c \
-				parser.c
+				parser.c \
+				bit_operations.c \
+				solver.c
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_FILES))
 OBJ = $(addprefix $(OBJ_PATH), $(SRCS_FILES:.c=.o))
@@ -58,7 +60,7 @@ $(OBJ_PATH)%.o: $(SRCS_PATH)%.c
 
 	@echo Compilation of $(notdir $<) $(GREEN)done.$(OFF)
 	@mkdir -p `dirname $@`
-	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
+	@gcc -c -g $(FLAGS) $(INCLUDES) $< -o $@
 
 clean:
 
@@ -84,6 +86,12 @@ debug_clean:
 
 debug: CFLAGS := -g
 debug: re
+
+test: all
+	@assets/filler_vm -f assets/maps/map00 -p1 ./atyrode.filler -p2 assets/players/superjeannot.filler -s 404
+
+test_python: all
+	@python3 ../filler_vm_py/filler_vm.py -f assets/maps/map00 -p1 ./atyrode.filler -p2 assets/players/abanlin.filler -s 404
 
 # This allows us to print any variable of the makefile
 print-%  : ; @echo $* = $($*)

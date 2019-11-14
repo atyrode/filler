@@ -31,22 +31,33 @@ typedef struct		s_coords
 
 typedef struct		s_game_object
 {
-	t_coords		*coords;
-	char			representation[15000];
+	t_coords		coords;
+	__uint128_t		*bitfield;
+	__uint128_t		*bitfield2;
 }					t_game_object;
 
 /*
- ** This structure represents the game as its current state
- ** it stores a map game object and a piece game object
- ** as well as different informations about the game
+ ** This structure represents the player in the current game state
+ ** It stores the player sign
 */
 
-typedef struct 		s_game_state
+typedef struct		s_player
 {
-	t_game_object	*map;
-	t_game_object	*piece;
+	char 			sign;
+	t_coords		starting_coords;
+}					t_player;
+
+/*
+ ** This structure represents the game as its current state.
+ ** It stores two game objects (current map and piece) and a  player
+*/
+
+typedef struct		s_game_state
+{
+	t_game_object	map;
+	t_game_object	piece;
+	t_player		player;
 	int				turn;
-	int				player_number;
 }					t_game_state;
 
 #endif
