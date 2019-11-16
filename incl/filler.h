@@ -31,7 +31,7 @@ typedef __uint128_t 	uint128;
 int						parser(t_game_state	*game);
 void					filler(t_game_state *game);
 void					solver(t_game_state *game);
-void					print_bits(uint128 x, int size, int width);
+void					print_bitfield(uint128 *bitfield, int size, int width);
 void					ft_exit(char 		*str);
 
 #endif

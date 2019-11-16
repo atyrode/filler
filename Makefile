@@ -38,7 +38,8 @@ SRCS_FILES  =  main.c \
 				filler.c \
 				parser.c \
 				bit_operations.c \
-				solver.c
+				solver.c \
+				utils.c
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_FILES))
 OBJ = $(addprefix $(OBJ_PATH), $(SRCS_FILES:.c=.o))

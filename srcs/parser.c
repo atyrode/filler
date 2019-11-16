@@ -12,48 +12,17 @@
 
 #include "filler.h"
 
-/*
-** This function takes a bitfield (an array of __uint128_t) and prints it out
-** under its binary representation, it also visually format so that it
-** looks just like the real board.
-*/
 
-void		print_bitfield(uint128 *bitfield, int size, int width)
+#include <stdio.h>
+
+void print_binary(uint128 number)
 {
-	uint128 z;
-	int		count;
-	int		skipped;
-
-	count = 0;
-	skipped = 0;
-	while (count < size)
-	{
-		z = 1;
-		z <<= (sizeof(uint128) * 8 - 1);
-		while (z > 0) {
-
-			if (count % 128 == 0)
-				ft_printf("@");
-
-			if ((count/128 == size/128) && (skipped < (((size/128 + 1) * 128) - size)))
-			{
-				skipped++;
-				z >>= 1;
-				continue;
-			}
-			if (bitfield[count/128] & z)
-				write(2, "1", 1);
-			else
-				write(2, "0", 1);
-
-			if (count % width == width - 1)
-				write(2, "\n", 1);
-
-			z >>= 1;
-			count++;
-		}
+	if (number) {
+		print_binary(number >> 1);
+		write(2, (number & 1) ? "1" : "0", 1);
 	}
 }
+
 
 /*
 ** This function takes a bitfield (an array of __uint128_t) and a line of a game
@@ -67,17 +36,47 @@ void		bitfield_conv(uint128 *bitfield, char *line, int read, char token)
 {
 	int 	i;
 	int 	chunk;
+	/*uint128 temp;
 
+	temp = 1;
+	temp <<= 127;*/
 	i = 0;
+	write(2, "bitf = [", 8);
 	while (line[i])
 	{
 		chunk = (read + i) / 128;
-		bitfield[chunk] = bitfield[chunk] << 1;
+		bitfield[chunk] <<= 1;
 		if (line[i] == token)
-			bitfield[chunk] = bitfield[chunk] | 1;
+		{
+			bitfield[chunk] |= 1;
+			write(2, "1", 1);
+		}
+		else
+			write(2, "0", 1);
 		i++;
 	}
+	write(2, "]\n", 2);
+
 }
+
+/*
+generer-un-bitfield-avec-la-piece-en-x-y (piece, bf, x, y)
+{
+	bzero bf;
+	start_position = x + (y * taille de la ligne);         // start   = 5
+	remplir la piece jusqua start position           //   [00000]
+
+	rentrer la premiere ligne de lapiece [.*.];      // [0000 0010]
+
+	complete jusqua la fin de la ligne;          // [0000 0010]
+
+	remplir la ligne suivante par : start % taille_dune_ligne //[0000 0010 / 00000]
+
+	rentrer la deuxieme ligne                // //[0000 0010 / 0000 0111]
+	....
+	completer avec des 0 jusqua la fin de la map
+}
+*/
 
 /*
 ** Here we get the first 'Piece X Y' line and gather the width and length
@@ -110,17 +109,11 @@ int			get_piece_info(t_game_object *piece,
 	while (total_read < piece->coords.x * piece->coords.y)
 	{
 		get_next_line(0, &line);
-		ft_printf("line = [%s]\n", line);
+		ft_printf("\nline = [%s]\n", line);
 		bitfield_conv(piece->bitfield, line, total_read, '*');
 		bitfield_conv(piece->bitfield2, line, total_read, '.');
 		total_read += ft_strlen(line);
 	}
-	ft_printf("Piece bitfields: %i\n", total_read);
-	ft_printf("\n");
-	print_bitfield(piece->bitfield, map->coords.x * map->coords.y, map->coords.y);
-	ft_printf("\n-----------------------------------------------------------\n");
-	print_bitfield(piece->bitfield2, map->coords.x * map->coords.y, map->coords.y);
-	ft_printf("\n");
 	return (0);
 }
 
@@ -154,17 +147,14 @@ int			get_map_info(t_game_object *map, char *line)
 	while (total_read < map->coords.x * map->coords.y)
 	{
 		get_next_line(0, &line);
-		ft_printf("line = [%s]\n", &line[4]);
+		ft_printf("\nline = [%s]\n", &line[4]);
 		bitfield_conv(map->bitfield, &line[4], total_read, 'O');
 		bitfield_conv(map->bitfield2, &line[4], total_read, 'X');
 		total_read += ft_strlen(&line[4]);
 	}
-	ft_printf("Map bitfields: %i\n", total_read);
-	ft_printf("\n");
-	print_bitfield(map->bitfield, total_read, map->coords.y);
-	ft_printf("\n-----------------------------------------------------------\n");
-	print_bitfield(map->bitfield2, total_read, map->coords.y);
-	ft_printf("\n");
+	print_binary(map->bitfield[0]);
+	print_binary(map->bitfield[1]);
+	print_binary(map->bitfield[2]);
 	return (0);
 }
 
