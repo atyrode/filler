@@ -15,23 +15,33 @@
 
 # include "libft.h"
 # include "structures.h"
-# ifdef __SIZEOF_UINT128__
-#endif
 
 /*
  ** Those includes might need to get removed before giving the project
+ ** Todo: Add these as a preprocessor/makefile rule?
 */
 
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 
-typedef __uint128_t 	uint128;
+void		board_printer(t_game_state game);
+void		piece_placement_viewer(int x, int y, int color, t_game_state game);
 
-int						parser(t_game_state	*game);
-void					filler(t_game_state *game);
-void					solver(t_game_state *game);
-void					print_bitfield(uint128 *bitfield, int size, int width);
-void					ft_exit(char 		*str);
+/*
+ ** End of might remove
+*/
+
+# define KO 1
+# define OK 0
+
+# define VALID 1
+# define INVALID 0
+
+int			parser(t_game_state	*game);
+void		solver(t_game_state game);
+void		skip_line(char 		**line);
+void		ft_exit(char 		*str);
 
 #endif

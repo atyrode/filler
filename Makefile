@@ -35,9 +35,7 @@ FLAGS		= -Wall -Wextra -Werror
 INCLUDES	= -I ./$(INCL_PATH) -I $(LIBFT_PATH)includes
 
 SRCS_FILES  =  main.c \
-				filler.c \
 				parser.c \
-				bit_operations.c \
 				solver.c \
 				utils.c
 
@@ -89,7 +87,7 @@ debug: CFLAGS := -g
 debug: re
 
 test: all
-	@assets/filler_vm -f assets/maps/map00 -p1 ./atyrode.filler -p2 assets/players/superjeannot.filler -s 404
+	@assets/filler_vm -f assets/maps/map01 -p1 ./atyrode.filler -p2 assets/players/superjeannot.filler
 
 test_python: all
 	@python3 ../filler_vm_py/filler_vm.py -f assets/maps/map00 -p1 ./atyrode.filler -p2 assets/players/abanlin.filler -s 404

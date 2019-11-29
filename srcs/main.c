@@ -12,6 +12,12 @@
 
 #include "filler.h"
 
+void				ft_exit(char *str)
+{
+	ft_putstr(str);
+	exit(0);
+}
+
 /*
  ** The main function represents the game loop. It calls the different functions
  ** of the game all the way to the solving algorithm.
@@ -26,11 +32,13 @@ int					main(void)
 	get_next_line(0, &line);
 	if (ft_strlen(line) < 11 || (line[10] != '1' && line[10] != '2'))
 		return (0);
-	game.player.sign = (line[10] == '1' ? 'O' : 'X');
-	ft_printf("Player sign = [%c]\n", game.player.sign);
+	game.challenger.sign = (line[10] == '1' ? 'O' : 'X');
+	game.opponent.sign = (game.challenger.sign == 'O' ? 'X' : 'O');
 	free(line);
-	if (1)
-		filler(&game);
-
+	while (1)
+	{
+		parser(&game);
+		solver(game);
+	}
 	return (0);
 }

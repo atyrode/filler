@@ -14,49 +14,41 @@
 # define STRUCTURES_H
 
 /*
- ** This structure represents a set of coordinates
- ** represented by two ints: x and y
-*/
-
-typedef struct		s_coords
-{
-	int				x;
-	int				y;
-}					t_coords;
-
-/*
- ** This structure represents a game object that
- ** has a set of coordinates (x, y) and a string representation
+ ** This structure represents a game object with its width, length
+ ** and a two dimensional array filled with characters
 */
 
 typedef struct		s_game_object
 {
-	t_coords		coords;
-	__uint128_t		*bitfield;
-	__uint128_t		*bitfield2;
+	int				height;
+	int				length;
+	int				size;
+	char 			**table;
 }					t_game_object;
 
 /*
  ** This structure represents the player in the current game state
- ** It stores the player sign
+ ** It stores the player sign and its starting coordinates
 */
 
 typedef struct		s_player
 {
 	char 			sign;
-	t_coords		starting_coords;
+	int				x;
+	int				y;
 }					t_player;
 
 /*
  ** This structure represents the game as its current state.
- ** It stores two game objects (current map and piece) and a  player
+ ** It stores two game objects (current map and piece) and a player
 */
 
 typedef struct		s_game_state
 {
 	t_game_object	map;
 	t_game_object	piece;
-	t_player		player;
+	t_player		challenger;
+	t_player		opponent;
 	int				turn;
 }					t_game_state;
 

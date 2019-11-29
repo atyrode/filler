@@ -12,42 +12,64 @@
 
 #include "filler.h"
 
-/*
-** This function takes a bitfield (an array of __uint128_t) and prints it out
-** under its binary representation, it also visually format so that it
-** looks just like the real board.
-*/
-
-void		print_bitfield(uint128 *bitfield, int size, int width)
+void		piece_placement_viewer(int x, int y, int p_color, t_game_state game)
 {
-	uint128 z;
-	int		count;
-	int		skipped;
+	int 	i;
+	int 	j;
+	int		color;
 
-	count = 0;
-	skipped = 0;
-	while (count < size)
+
+	i = -1;
+	while (++i < game.map.height)
 	{
-		z = 1;
-		//z <<= (sizeof(uint128) * 8 - 1);
-		while (z > 0)
+		j = -1;
+		while (++j < game.map.length)
 		{
-			/*if ((count/128 == size/128) && (skipped < (((size/128 + 1) * 128) - size)))
-			{
-				skipped++;
-				z >>= 1;
-				continue;
-			}*/
-			if (count % 128 == 0)
-				write(2, "||", 2);
-			if (bitfield[count/128] & z)
-				write(2, "1", 1);
+			if (game.map.table[i][j] == '.')
+				color = 1;
+			else if (game.map.table[i][j] == 'X')
+				color = 7;
+			else if (game.map.table[i][j] == 'O')
+				color = 5;
+			if ((i >= x && i < x + game.piece.height)
+			&& (j >= y && j < y + game.piece.length)
+			&& game.piece.table[i - x][j - y] != '.')
+				ft_printf("%*~%c%~", p_color, game.challenger.sign);
 			else
-				write(2, "0", 1);
-			if (count % width == width - 1)
-				write(2, "\n", 1);
-			z <<= 1;
-			count++;
+				ft_printf("%*~%c%~", color, game.map.table[i][j]);
 		}
+		ft_printf("\n");
 	}
+}
+
+void		board_printer(t_game_state game)
+{
+	int 	i;
+	int 	j;
+	int		color;
+	char	current;
+
+	i = -1;
+	while (++i < game.map.height)
+	{
+		j = -1;
+		while (++j < game.map.length)
+		{
+			current = game.map.table[i][j];
+			if (current == '.')
+				color = 1;
+			else if (current == 'X')
+				color = 7;
+			else if (current == 'O')
+				color = 5;
+			if (game.map.table[i][j])
+			ft_printf("%*~%c%~", color, game.map.table[i][j]);
+		}
+		ft_printf("\n");
+	}
+}
+
+void		skip_line(char  **line)
+{
+	get_next_line(0, line);
 }

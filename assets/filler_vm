@@ -70,6 +70,7 @@ class Plateau
 			@piece_content += "."
 		end
 		@piece_content[(y = rand(@piece_row)) * @piece_col + (x = rand(@piece_col))] = '*'
+
 		p = 0
 		i = 4
 		if (y + 1 < @piece_row && rand(i) == 1)
@@ -247,8 +248,8 @@ class Plateau
 		for y in 0..(@piece_row - 1)
 			for x in 0..(@piece_col - 1)
 				if (piece_char(x, y) == '*')
-                    #@map_table[y + row][x + col] = char
-                    @map_table[y + row][x + col] = char.downcase
+                    @map_table[y + row][x + col] = char
+                    #@map_table[y + row][x + col] = char.downcase
 				end
 			end
 		end
