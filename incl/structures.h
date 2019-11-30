@@ -23,7 +23,7 @@ typedef struct		s_game_object
 	int				height;
 	int				length;
 	int				size;
-	char 			**table;
+	char			**table;
 }					t_game_object;
 
 /*
@@ -33,7 +33,7 @@ typedef struct		s_game_object
 
 typedef struct		s_player
 {
-	char 			sign;
+	char			sign;
 	int				x;
 	int				y;
 }					t_player;

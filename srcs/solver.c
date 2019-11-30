@@ -12,10 +12,6 @@
 
 #include "filler.h"
 
-// Todo: Some sort of algorithm to determine where to place the piece?
-// Todo: It seems like I am done with determining whether a place can be place
-// Todo: While abiding to the gamerules
-
 int				check_piece_superposition(int x, int y, t_game_state game)
 {
 	int			i;
@@ -30,17 +26,15 @@ int				check_piece_superposition(int x, int y, t_game_state game)
 	{
 		j = -1;
 		while (++j < game.piece.length)
-		{
 			if (game.piece.table[i][j] == '*')
 			{
-				if (ft_toupper(game.map.table[x + i][y + j]) ==
-														game.challenger.sign)
+				if (ft_toupper(game.map.table[x + i][y + j])
+				== game.challenger.sign)
 					challenger_count++;
-				else if (ft_toupper(game.map.table[x + i][y + j]) ==
-														game.opponent.sign)
+				else if (ft_toupper(game.map.table[x + i][y + j])
+				== game.opponent.sign)
 					opponent_count++;
 			}
-		}
 	}
 	if (challenger_count != 1 || opponent_count > 0)
 		return (KO);
@@ -63,42 +57,31 @@ int				check_position_validity(int x, int y, t_game_state game)
 	return (VALID);
 }
 
-void			solver(t_game_state	game)
+int				solver(t_game_state game)
 {
-	int			x;
-	int			y;
-	int			current_fitness;
-	int			best_fitness;
+	int			coords[2];
+	int			fitness[2];
 	int			best_coords[2];
 
 	best_coords[0] = 0;
 	best_coords[1] = 0;
-
-	best_fitness = 2147483647;
-	x = -1;
-	while (++x + game.piece.height <= game.map.height)
+	fitness[0] = 2147483647;
+	coords[0] = -1;
+	while (++coords[0] + game.piece.height <= game.map.height)
 	{
-		y = -1;
-		while (++y < game.map.length)
-		{
-			if (check_position_validity(x, y, game))
+		coords[1] = -1;
+		while (++coords[1] < game.map.length)
+			if (check_position_validity(coords[0], coords[1], game))
 			{
-				//piece_placement_viewer(x, y, 4, game);
-				current_fitness = algorithm(x, y, game);
-				if (current_fitness < best_fitness)
+				fitness[1] = algorithm(coords[0], coords[1], game);
+				if (fitness[1] < fitness[0])
 				{
-					best_fitness = current_fitness;
-					best_coords[0] = x;
-					best_coords[1] = y;
+					fitness[0] = fitness[1];
+					best_coords[0] = coords[0];
+					best_coords[1] = coords[1];
 				}
 			}
-			//else
-				//piece_placement_viewer(x, y, 5, game);
-		}
 	}
 	piece_position_sender(best_coords[0], best_coords[1]);
-
+	return (fitness[0]);
 }
-
-
-

@@ -14,20 +14,24 @@
 
 void		piece_position_sender(int x, int y)
 {
-	//ft_printf("x = [%i] | y = [%i]\n", x, y);
-	ft_putstr(ft_itoa(x));
+	char	*str;
+
+	str = ft_itoa(x);
+	ft_putstr(str);
+	free(str);
 	ft_putchar(' ');
-	ft_putstr(ft_itoa(y));
+	str = ft_itoa(y);
+	ft_putstr(str);
+	free(str);
 	ft_putchar('\n');
 }
 
 void		piece_placement_viewer(int x, int y, int p_color, t_game_state game)
 {
-	int 	i;
-	int 	j;
+	int		i;
+	int		j;
 	int		color;
 
-	ft_printf("=========================================\n");
 	i = -1;
 	while (++i < game.map.height)
 	{
@@ -68,15 +72,14 @@ void		heatmap_viewer(t_game_state game)
 		ft_printf("\n\n");
 		x++;
 	}
-	write(2, "uUu\n", 4);
 }
 
-void		skip_line(char  **line)
+void		skip_line(char **line)
 {
 	get_next_line(0, line);
 }
 
-void				ft_exit(char *str)
+void		ft_exit(char *str)
 {
 	ft_putstr(str);
 	exit(0);

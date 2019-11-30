@@ -12,33 +12,24 @@
 
 #include "filler.h"
 
-void				free_the_world(t_game_state *game)
+void				free_the_world(t_game_state *game, int old_piece_height)
 {
 	int				x;
 
-	//ft_printf("%p || %p || %p\n", game->map.table, game->piece.table, game->heatmap);
 	x = -1;
-	while(++x < game->map.height)
-	{
-		//ft_printf("map table: %p\n", game->map.table[x]);
+	write(2, "OOO\n", 4);
+	while (++x < game->map.height)
 		free(game->map.table[x]);
-	}
 	free(game->map.table);
-
+	write(2, "OdO\n", 4);
 	x = -1;
-	while(++x < game->piece.height)
-	{
-		//ft_printf("piece table: %p\n", game->piece.table[x]);
+	while (++x < old_piece_height)
 		free(game->piece.table[x]);
-	}
 	free(game->piece.table);
-
+	write(2, "AYA\n", 4);
 	x = -1;
-	while(++x < game->map.height)
-	{
-		//ft_printf("heatmap: %p\n", game->heatmap[x]);
+	while (++x < game->map.height)
 		free(game->heatmap[x]);
-	}
 	free(game->heatmap);
 }
 
@@ -51,7 +42,10 @@ int					main(void)
 {
 	t_game_state	game;
 	char			*line;
+	int				old_piece_height;
+	int				value;
 
+	value = 1;
 	ft_bzero(&game, sizeof(t_game_state));
 	get_next_line(0, &line);
 	if (ft_strlen(line) < 11 || (line[10] != '1' && line[10] != '2'))
@@ -62,11 +56,14 @@ int					main(void)
 	while (1)
 	{
 		write(2, "1\n", 2);
-		parser(&game);
+		old_piece_height = parser(&game);
 		write(2, "2\n", 2);
-		solver(game);
+		value = solver(game);
 		write(2, "3\n", 2);
-		//free_the_world(&game);
+		free_the_world(&game, old_piece_height);
+		if (value == 2147483647)
+			break ;
+		write(2, "4\n", 2);
 	}
 	return (0);
 }
