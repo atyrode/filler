@@ -68,7 +68,7 @@ void		heatmap_viewer(t_game_state game)
 		ft_printf("\n\n");
 		x++;
 	}
-
+	write(2, "uUu\n", 4);
 }
 
 void		skip_line(char  **line)

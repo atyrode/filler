@@ -73,6 +73,7 @@ void			solver(t_game_state	game)
 
 	best_coords[0] = 0;
 	best_coords[1] = 0;
+
 	best_fitness = 2147483647;
 	x = -1;
 	while (++x + game.piece.height <= game.map.height)
@@ -82,7 +83,6 @@ void			solver(t_game_state	game)
 		{
 			if (check_position_validity(x, y, game))
 			{
-
 				//piece_placement_viewer(x, y, 4, game);
 				current_fitness = algorithm(x, y, game);
 				if (current_fitness < best_fitness)
@@ -97,7 +97,7 @@ void			solver(t_game_state	game)
 		}
 	}
 	piece_position_sender(best_coords[0], best_coords[1]);
-	ft_printf("sent\n");
+
 }
 
 

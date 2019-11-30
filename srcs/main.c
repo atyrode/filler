@@ -61,11 +61,11 @@ int					main(void)
 	free(line);
 	while (1)
 	{
-		ft_printf("first\n");
+		write(2, "1\n", 2);
 		parser(&game);
-		ft_printf("second\n");
+		write(2, "2\n", 2);
 		solver(game);
-		ft_printf("test final\n");
+		write(2, "3\n", 2);
 		//free_the_world(&game);
 	}
 	return (0);

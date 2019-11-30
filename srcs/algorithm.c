@@ -49,7 +49,7 @@ void				horizontal_and_aura_pass(t_game_state game)
 		y = -1;
 		while (++y < game.map.length)
 			if (game.heatmap[x][y] > 0 && 4 > game.heatmap[x][y])
-				game.heatmap[x][y] = 99;
+				game.heatmap[x][y] += 4;
 	}
 }
 
@@ -61,34 +61,42 @@ void				fill_heatmap(t_game_state game)
 	int				current;
 
 	x = -1;
-	while (++x < game.map.height)
-	{
+	while (++x < game.map.height) {
+		write(2, "152\n", 4);
 		// We just skip the line if there's no enemy marker in it
 		if (!ft_strchr(game.map.table[x], game.opponent.sign))
 			continue;
 		current = 0;
 		y = -1;
 		heat = 0;
+
+		write(2, "153\n", 4);
 		while (++y < game.map.length)
 			// Firstly, we check whether Y is on a enemy marker or if we're at
 			// the beginning
-			if (ft_toupper(game.map.table[x][y]) == game.opponent.sign || y == 0)
+			if (ft_toupper(game.map.table[x][y]) == game.opponent.sign ||
+				y == 0)
 			{
+				write(2, "154\n", 4);
 				// Depending on the case, we set the first data to its corresponding
 				// value
+
+				ft_printf("x = %i | y = %i\n", x, y);
 				game.heatmap[x][y] =
-				(ft_toupper(game.map.table[x][y]) == game.opponent.sign) ? 0 : 99;
+						(ft_toupper(game.map.table[x][y]) == game.opponent.sign)
+						? 0 : 99;
 
 				// We save where we're at, in case we're on an enemy marker and
 				// increase Y by one after saving it.
 				current = y++;
-
+				write(2, "155\n", 4);
 				// Now we go through the map until we meet another marker,
 				// and fill the heatmap value
 				heat = 1;
-				while (ft_toupper(game.map.table[x][y]) != game.opponent.sign)
+				while (y < game.map.length && ft_toupper(game.map.table[x][y]) != game.opponent.sign)
 					game.heatmap[x][y++] = heat++;
 
+				write(2, "156\n", 4);
 				// Then, if we're not at the end of the map and there's another
 				// enemy marker, we go back and fix the value in between
 				if (ft_toupper(game.map.table[x][y]) == game.opponent.sign)
@@ -101,16 +109,25 @@ void				fill_heatmap(t_game_state game)
 					// we trigger it to go further if it's the first marker we met
 					// therefore it goes back all the way to the beginning and fix
 					// the value in the correct way
-					while (game.heatmap[x][y] >= heat || (ft_toupper(game.map.table[x][y]) != game.opponent.sign && y > 0))
-						game.heatmap[x][y--] = heat++;
-				}
+					while (y >= 0
+					&& ((ft_toupper(game.map.table[x][y]) != game.opponent.sign)
+					|| game.heatmap[x][y] >= heat))
+					{
+						ft_printf("1. x = %i | y = %i\n", x, y);
+						game.heatmap[x][y] = heat++;
+						y--;
+						ft_printf("2. x = %i | y = %i\n", x, y);
+					}
 
+				}
+				write(2, "157\n", 4);
 				// And we go back to where we came from
 				y = current;
 			}
-		}
+	}
 	horizontal_and_aura_pass(game);
-	//heatmap_viewer(game);
+	heatmap_viewer(game);
+	write(2, "158\n", 4);
 }
 
 int					algorithm(int x, int y, t_game_state game)

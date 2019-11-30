@@ -39,7 +39,7 @@ void		heatmap_viewer(t_game_state game);
 # define VALID 1
 # define INVALID 0
 
-int			parser(t_game_state	*game);
+void		parser(t_game_state	*game);
 void		solver(t_game_state game);
 int			algorithm(int x, int y, t_game_state game);
 void		skip_line(char 		**line);
