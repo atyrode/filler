@@ -13,7 +13,7 @@
 #include "filler.h"
 
 // Todo: Some sort of algorithm to determine where to place the piece?
-// Todo: It seems like I am done with determining wether a place can be place
+// Todo: It seems like I am done with determining whether a place can be place
 // Todo: While abiding to the gamerules
 
 int				check_piece_superposition(int x, int y, t_game_state game)
@@ -67,28 +67,37 @@ void			solver(t_game_state	game)
 {
 	int			x;
 	int			y;
+	int			current_fitness;
+	int			best_fitness;
+	int			best_coords[2];
 
-	x = 0;
-	while (x + game.piece.height <= game.map.height)
+	best_coords[0] = 0;
+	best_coords[1] = 0;
+	best_fitness = 2147483647;
+	x = -1;
+	while (++x + game.piece.height <= game.map.height)
 	{
-		y = 0;
-		while (y < game.map.length)
+		y = -1;
+		while (++y < game.map.length)
 		{
-			//ft_printf("=====================\n");
-			//piece_placement_viewer(x, y, 4, game);
 			if (check_position_validity(x, y, game))
 			{
-				//ft_printf("x = [%i] | y = [%i]\n", x, y);
-				ft_putstr(ft_itoa(x));
-				ft_putchar(' ');
-				ft_putstr(ft_itoa(y));
-				ft_putchar('\n');
-				return ;
+
+				//piece_placement_viewer(x, y, 4, game);
+				current_fitness = algorithm(x, y, game);
+				if (current_fitness < best_fitness)
+				{
+					best_fitness = current_fitness;
+					best_coords[0] = x;
+					best_coords[1] = y;
+				}
 			}
-			y++;
+			//else
+				//piece_placement_viewer(x, y, 5, game);
 		}
-		x++;
 	}
+	piece_position_sender(best_coords[0], best_coords[1]);
+	ft_printf("sent\n");
 }
 
 

@@ -50,6 +50,7 @@ typedef struct		s_game_state
 	t_player		challenger;
 	t_player		opponent;
 	int				turn;
+	int				**heatmap;
 }					t_game_state;
 
 #endif

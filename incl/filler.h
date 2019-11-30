@@ -26,8 +26,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-void		board_printer(t_game_state game);
 void		piece_placement_viewer(int x, int y, int color, t_game_state game);
+void		heatmap_viewer(t_game_state game);
 
 /*
  ** End of might remove
@@ -41,7 +41,10 @@ void		piece_placement_viewer(int x, int y, int color, t_game_state game);
 
 int			parser(t_game_state	*game);
 void		solver(t_game_state game);
+int			algorithm(int x, int y, t_game_state game);
 void		skip_line(char 		**line);
 void		ft_exit(char 		*str);
+void		piece_position_sender(int x, int y);
+void		fill_heatmap(t_game_state game);
 
 #endif

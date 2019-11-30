@@ -12,10 +12,34 @@
 
 #include "filler.h"
 
-void				ft_exit(char *str)
+void				free_the_world(t_game_state *game)
 {
-	ft_putstr(str);
-	exit(0);
+	int				x;
+
+	//ft_printf("%p || %p || %p\n", game->map.table, game->piece.table, game->heatmap);
+	x = -1;
+	while(++x < game->map.height)
+	{
+		//ft_printf("map table: %p\n", game->map.table[x]);
+		free(game->map.table[x]);
+	}
+	free(game->map.table);
+
+	x = -1;
+	while(++x < game->piece.height)
+	{
+		//ft_printf("piece table: %p\n", game->piece.table[x]);
+		free(game->piece.table[x]);
+	}
+	free(game->piece.table);
+
+	x = -1;
+	while(++x < game->map.height)
+	{
+		//ft_printf("heatmap: %p\n", game->heatmap[x]);
+		free(game->heatmap[x]);
+	}
+	free(game->heatmap);
 }
 
 /*
@@ -37,8 +61,12 @@ int					main(void)
 	free(line);
 	while (1)
 	{
+		ft_printf("first\n");
 		parser(&game);
+		ft_printf("second\n");
 		solver(game);
+		ft_printf("test final\n");
+		//free_the_world(&game);
 	}
 	return (0);
 }

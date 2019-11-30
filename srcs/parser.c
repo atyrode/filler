@@ -17,6 +17,35 @@
 **
 */
 
+int			create_heatmap(t_game_state *game) {
+	int 	i;
+	int		x;
+	int		y;
+
+	i = -1;
+	x = -1;
+	if (!(game->heatmap = malloc(game->map.height * sizeof(int *))))
+		return (KO);
+	while (++i < game->map.height)
+	{
+		if (!(game->heatmap[i] = malloc(game->map.length * sizeof(int))))
+			return (KO);
+	}
+	while (++x < game->map.height)
+	{
+		y = -1;
+		while (++y < game->map.length)
+			game->heatmap[x][y] = 99;
+	}
+	fill_heatmap(*game);
+	return (OK);
+}
+
+/*
+**
+**
+*/
+
 void		fix_piece_size(t_game_object *piece, int old_height, int old_length)
 {
 	int		x;
@@ -39,10 +68,8 @@ void		fix_piece_size(t_game_object *piece, int old_height, int old_length)
 					new_length = y;
 			}
 	}
-	new_height++;
-	new_length++;
-	piece->height = new_height;
-	piece->length = new_length;
+	piece->height = ++new_height;
+	piece->length = ++new_length;
 }
 
 /*
@@ -75,20 +102,25 @@ int			get_object_info(t_game_object *object, char *line,
 	i = 0;
 	get_object_dimensions(object, line, x_pos);
 	if (!(object->size))
-		return (1);
+		return (KO);
 	if (!(object->table = malloc(object->height * sizeof(char *))))
-		return (1);
+		return (KO);
 	if (shift == 4)
+	{
 		skip_line(&line);
+		ft_printf("%p\n", line);
+		free(line);
+	}
 	while (i < object->height)
 	{
 		get_next_line(0, &line);
 		if (!(object->table[i] = malloc(object->length * sizeof(char))))
-			return (1);
+			return (KO);
 		ft_strcpy(object->table[i], &line[shift]);
+		free(line);
 		i++;
 	}
-	return (0);
+	return (OK);
 }
 
 /*
@@ -100,19 +132,22 @@ int			parser(t_game_state *game)
 {
 	char	*line;
 
+	ft_printf("1\n");
 	get_next_line(0, &line);
 	if (ft_strlen(line) < 8
 	|| (ft_strncmp(line, "Plateau ", 8)) != 0
-	|| get_object_info(&game->map, line, 8, 4))
+	|| get_object_info(&game->map, line, 8, 4)
+	|| create_heatmap(game))
 		ft_exit("ERROR: Invalid map received as input\n");
-
+	free(line);
+	ft_printf("2\n");
 	get_next_line(0, &line);
 	if (ft_strlen(line) < 6
 	|| (ft_strncmp(line, "Piece ", 6)) != 0
 	|| get_object_info(&game->piece, line, 6, 0))
 		ft_exit("ERROR: Invalid piece received as input\n");
-
+	free(line);
+	ft_printf("3\n");
 	fix_piece_size(&game->piece, game->piece.height, game->piece.length);
-
 	return (1);
 }

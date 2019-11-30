@@ -12,13 +12,22 @@
 
 #include "filler.h"
 
+void		piece_position_sender(int x, int y)
+{
+	//ft_printf("x = [%i] | y = [%i]\n", x, y);
+	ft_putstr(ft_itoa(x));
+	ft_putchar(' ');
+	ft_putstr(ft_itoa(y));
+	ft_putchar('\n');
+}
+
 void		piece_placement_viewer(int x, int y, int p_color, t_game_state game)
 {
 	int 	i;
 	int 	j;
 	int		color;
 
-
+	ft_printf("=========================================\n");
 	i = -1;
 	while (++i < game.map.height)
 	{
@@ -42,34 +51,33 @@ void		piece_placement_viewer(int x, int y, int p_color, t_game_state game)
 	}
 }
 
-void		board_printer(t_game_state game)
+void		heatmap_viewer(t_game_state game)
 {
-	int 	i;
-	int 	j;
-	int		color;
-	char	current;
+	int		x;
+	int		y;
 
-	i = -1;
-	while (++i < game.map.height)
+	x = 0;
+	while (x < game.map.height)
 	{
-		j = -1;
-		while (++j < game.map.length)
+		y = 0;
+		while (y < game.map.length)
 		{
-			current = game.map.table[i][j];
-			if (current == '.')
-				color = 1;
-			else if (current == 'X')
-				color = 7;
-			else if (current == 'O')
-				color = 5;
-			if (game.map.table[i][j])
-			ft_printf("%*~%c%~", color, game.map.table[i][j]);
+			ft_printf("%02i ", game.heatmap[x][y]);
+			y++;
 		}
-		ft_printf("\n");
+		ft_printf("\n\n");
+		x++;
 	}
+
 }
 
 void		skip_line(char  **line)
 {
 	get_next_line(0, line);
+}
+
+void				ft_exit(char *str)
+{
+	ft_putstr(str);
+	exit(0);
 }
