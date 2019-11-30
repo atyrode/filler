@@ -17,16 +17,13 @@ void				free_the_world(t_game_state *game, int old_piece_height)
 	int				x;
 
 	x = -1;
-	write(2, "OOO\n", 4);
 	while (++x < game->map.height)
 		free(game->map.table[x]);
 	free(game->map.table);
-	write(2, "OdO\n", 4);
 	x = -1;
 	while (++x < old_piece_height)
 		free(game->piece.table[x]);
 	free(game->piece.table);
-	write(2, "AYA\n", 4);
 	x = -1;
 	while (++x < game->map.height)
 		free(game->heatmap[x]);
@@ -55,15 +52,11 @@ int					main(void)
 	free(line);
 	while (1)
 	{
-		write(2, "1\n", 2);
 		old_piece_height = parser(&game);
-		write(2, "2\n", 2);
 		value = solver(game);
-		write(2, "3\n", 2);
 		free_the_world(&game, old_piece_height);
 		if (value == 2147483647)
 			break ;
-		write(2, "4\n", 2);
 	}
 	return (0);
 }

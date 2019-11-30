@@ -108,7 +108,6 @@ int			parser(t_game_state *game)
 
 	while (get_next_line(0, &line))
 	{
-		write(2, "34\n", 3);
 		if (!ft_strncmp(line, "Plateau ", 8))
 		{
 			if (get_object_info(&game->map, line, 8, 4)
@@ -127,10 +126,7 @@ int			parser(t_game_state *game)
 				break ;
 			}
 		}
-		write(2, "39\n", 3);
 	}
-	ft_printf("ptr_map = %p\n", game->map.table);
-	ft_printf("ptr_piece = %p\n", game->piece.table);
 	return (fix_piece_size(&game->piece,
 	game->piece.height, game->piece.length));
 }

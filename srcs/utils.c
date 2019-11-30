@@ -18,11 +18,11 @@ void		piece_position_sender(int x, int y)
 
 	str = ft_itoa(x);
 	ft_putstr(str);
-	free(str);
+	ft_strdel(&str);
 	ft_putchar(' ');
 	str = ft_itoa(y);
 	ft_putstr(str);
-	free(str);
+	ft_strdel(&str);
 	ft_putchar('\n');
 }
 
