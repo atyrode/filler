@@ -12,22 +12,30 @@
 
 #include "filler.h"
 
-void				free_the_world(t_game_state *game, int old_piece_height)
+//TODO: Ne pas segfault s'il n'y a que un seul input
+
+void				free_map(t_game_state *game)
 {
 	int				x;
 
 	x = -1;
 	while (++x < game->map.height)
+	{
 		free(game->map.table[x]);
+		free(game->heatmap[x]);
+	}
+	free(game->heatmap);
 	free(game->map.table);
+}
+
+void				free_piece(t_game_state *game, int old_piece_height)
+{
+	int				x;
+
 	x = -1;
 	while (++x < old_piece_height)
 		free(game->piece.table[x]);
 	free(game->piece.table);
-	x = -1;
-	while (++x < game->map.height)
-		free(game->heatmap[x]);
-	free(game->heatmap);
 }
 
 /*
@@ -41,7 +49,9 @@ int					main(void)
 	char			*line;
 	int				old_piece_height;
 	int				value;
+	int				first_parse;
 
+	first_parse = 1;
 	value = 1;
 	ft_bzero(&game, sizeof(t_game_state));
 	get_next_line(0, &line);
@@ -52,11 +62,15 @@ int					main(void)
 	free(line);
 	while (1)
 	{
-		old_piece_height = parser(&game);
+		if (!(old_piece_height = parser(&game, first_parse)))
+			break;
 		value = solver(game);
-		free_the_world(&game, old_piece_height);
+		free_piece(&game, old_piece_height);
 		if (value == 2147483647)
 			break ;
+		first_parse = 0;
 	}
+	if (old_piece_height)
+		free_map(&game);
 	return (0);
 }

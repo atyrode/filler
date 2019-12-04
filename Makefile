@@ -88,7 +88,7 @@ debug: CFLAGS := -g
 debug: re
 
 test: all
-	@assets/filler_vm -f assets/maps/map02 -p2 ./atyrode.filler -p1 assets/players/superjeannot.filler
+	@assets/filler_vm -f assets/maps/map01 -p2 ./atyrode.filler -p1 assets/players/superjeannot.filler
 
 test_python: all
 	@python3 ../filler_vm_py/filler_vm.py -f assets/maps/map00 -p1 ./atyrode.filler -p2 assets/players/abanlin.filler -s 404

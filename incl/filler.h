@@ -28,6 +28,7 @@
 
 void		piece_placement_viewer(int x, int y, int color, t_game_state game);
 void		heatmap_viewer(t_game_state game);
+void		board_viewer(t_game_state game);
 
 /*
  ** End of might remove
@@ -39,7 +40,7 @@ void		heatmap_viewer(t_game_state game);
 # define VALID 1
 # define INVALID 0
 
-int			parser(t_game_state *game);
+int			parser(t_game_state *game, int first_parse);
 int			solver(t_game_state game);
 int			algorithm(int x, int y, t_game_state game);
 void		skip_line(char **line);

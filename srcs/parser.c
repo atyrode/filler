@@ -12,7 +12,7 @@
 
 #include "filler.h"
 
-int			create_heatmap(t_game_state *game)
+int			create_heatmap(t_game_state *game, int first_parse)
 {
 	int		i;
 	int		x;
@@ -20,12 +20,16 @@ int			create_heatmap(t_game_state *game)
 
 	i = -1;
 	x = -1;
-	if (!(game->heatmap = malloc(game->map.height * sizeof(int *))))
-		return (KO);
-	while (++i < game->map.height)
+	if (first_parse)
 	{
-		if (!(game->heatmap[i] = malloc(game->map.length * sizeof(int))))
+		if (!(game->heatmap = malloc(game->map.height * sizeof(int *))))
 			return (KO);
+		while (++i < game->map.height)
+		{
+			if (!(game->heatmap[i] = malloc(game->map.length * sizeof(int))))
+				return (KO);
+			ft_bzero(game->heatmap[i], game->map.length + 1);
+		}
 	}
 	while (++x < game->map.height)
 	{
@@ -37,7 +41,8 @@ int			create_heatmap(t_game_state *game)
 	return (OK);
 }
 
-int			fix_piece_size(t_game_object *piece, int old_height, int old_length)
+int			fix_piece_size(t_game_object *piece, int old_height, int old_length,
+																	int end)
 {
 	int		x;
 	int		y;
@@ -47,6 +52,8 @@ int			fix_piece_size(t_game_object *piece, int old_height, int old_length)
 	new_height = 0;
 	new_length = 0;
 	x = -1;
+	if (!end)
+		return (0);
 	while (++x < old_height)
 	{
 		y = -1;
@@ -64,8 +71,14 @@ int			fix_piece_size(t_game_object *piece, int old_height, int old_length)
 	return (old_height);
 }
 
-void		get_object_dimensions(t_game_object *object, char *line, int i)
+void		get_object_dimensions(t_game_object *object, char *line)
 {
+	int		i;
+
+	i = 0;
+	while (ft_isalpha(line[i])
+	|| line[i] == ' ')
+		i++;
 	object->height = ft_atoi(&line[i]);
 	while (ft_isdigit(line[i]) || line[i] == ' ')
 		if (line[i++] == ' ')
@@ -74,18 +87,18 @@ void		get_object_dimensions(t_game_object *object, char *line, int i)
 	object->size = object->height * object->length;
 }
 
-int			get_object_info(t_game_object *object, char *line,
-														int x_pos, int shift)
+int			get_object_info(t_game_object *object, char *line, int first_parse,int shift)
 {
 	int		i;
 
 	i = 0;
-	get_object_dimensions(object, line, x_pos);
+	get_object_dimensions(object, line);
 	if (!(object->size))
 		return (KO);
-	if (!(object->table = malloc(object->height * sizeof(char *))))
-		return (KO);
-	if (shift == 4)
+	if (!shift || (shift && first_parse == 1))
+		if ((object->table = malloc(object->height * sizeof(char *))) == NULL)
+			return (KO);
+	if (shift)
 	{
 		skip_line(&line);
 		free(line);
@@ -93,8 +106,13 @@ int			get_object_info(t_game_object *object, char *line,
 	while (i < object->height)
 	{
 		get_next_line(0, &line);
-		if (!(object->table[i] = malloc(object->length * sizeof(char))))
-			return (KO);
+		if (!shift || (shift && first_parse == 1))
+			if ((object->table[i] = malloc((object->length + 1))) == NULL)
+			{
+				free(line);
+				return (KO);
+			}
+		ft_bzero(object->table[i], object->length + 1);
 		ft_strcpy(object->table[i], &line[shift]);
 		free(line);
 		i++;
@@ -102,23 +120,26 @@ int			get_object_info(t_game_object *object, char *line,
 	return (OK);
 }
 
-int			parser(t_game_state *game)
+int			parser(t_game_state *game, int first_parse)
 {
 	char	*line;
+	int		end;
 
+	end = 0;
 	while (get_next_line(0, &line))
 	{
+		end = 1;
 		if (!ft_strncmp(line, "Plateau ", 8))
 		{
-			if (get_object_info(&game->map, line, 8, 4)
-			|| create_heatmap(game))
+			if (get_object_info(&game->map, line, first_parse, 4)
+			|| create_heatmap(game, first_parse))
 				ft_exit("ERROR: Invalid map received as input\n");
 			else
 				free(line);
 		}
 		else if (!ft_strncmp(line, "Piece ", 6))
 		{
-			if (get_object_info(&game->piece, line, 6, 0))
+			if (get_object_info(&game->piece, line, first_parse, 0))
 				ft_exit("ERROR: Invalid piece received as input\n");
 			else
 			{
@@ -128,5 +149,5 @@ int			parser(t_game_state *game)
 		}
 	}
 	return (fix_piece_size(&game->piece,
-	game->piece.height, game->piece.length));
+	game->piece.height, game->piece.length, end));
 }
