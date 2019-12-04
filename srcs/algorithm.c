@@ -42,8 +42,8 @@ void			horizontal_and_aura_pass(t_game_state game)
 		while (y--)
 			swap_if_needed(game, x, y);
 	}
-	aura = (game.map.size < 500) ? 2 : 4;
-	aura = (game.map.size < 1000) ? 4 : 6;
+	aura = (game.map.size < 500) ? 2 : 3;
+	aura = (game.map.size < 1000) ? 3 : 4;
 	x = -1;
 	while (++x < game.map.height)
 	{
